@@ -8,6 +8,7 @@ import android.provider.BaseColumns;
 
 public final class InventoryContract {
     private InventoryContract() {
+        throw new AssertionError("No InventoryContractinstances for you!");
     }
 
     public static class ProductEntry implements BaseColumns{

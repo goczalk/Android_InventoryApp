@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Data added", Toast.LENGTH_SHORT).show();
         }
 
+        //TODO
+        //better to be OnStart()
+        //https://udacity-reviews-uploads.s3.us-west-2.amazonaws.com/_attachments/90400/1529577710/Screenshot_7.png
         String dbResult = InventoryDbUtils.readFromDb(dbHelper);
         TextView textView = findViewById(R.id.text_view);
         textView.setText(dbResult);
