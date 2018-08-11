@@ -1,21 +1,22 @@
 package com.example.android.inventoryapp;
 
-import android.content.ContentUris;
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.app.LoaderManager;
+import android.content.CursorLoader;
+import android.content.Loader;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
 import com.example.android.inventoryapp.data.InventoryDbHelper;
-import com.example.android.inventoryapp.data.InventoryDbUtils;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    private static final int INVENTORY_LOADER = 0;
     private InventoryDbHelper dbHelper;
+    private InventoryCursorAdapter inventoryCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +27,31 @@ public class MainActivity extends AppCompatActivity {
         View emptyView = findViewById(R.id.empty_view);
         inventoryListView.setEmptyView(emptyView);
 
-        InventoryCursorAdapter inventoryCursorAdapter = new InventoryCursorAdapter(this, null);
+        inventoryCursorAdapter = new InventoryCursorAdapter(this, null);
         inventoryListView.setAdapter(inventoryCursorAdapter);
 
-//        getLoaderManager().initLoader(PET_LOADER, null, this);
+        getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
 
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_QUANTITY
+        };
+        return new CursorLoader(this, ProductEntry.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        inventoryCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        inventoryCursorAdapter.swapCursor(null);
+    }
 }
