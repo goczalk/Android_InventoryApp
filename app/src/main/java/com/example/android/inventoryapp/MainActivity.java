@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
@@ -23,15 +24,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView inventoryListView = (ListView) findViewById(R.id.list);
+        ListView listView = (ListView) findViewById(R.id.list);
         View emptyView = findViewById(R.id.empty_view);
-        inventoryListView.setEmptyView(emptyView);
+        listView.setEmptyView(emptyView);
 
         inventoryCursorAdapter = new InventoryCursorAdapter(this, null);
-        inventoryListView.setAdapter(inventoryCursorAdapter);
+        listView.setAdapter(inventoryCursorAdapter);
 
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
-
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -8,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
 
@@ -42,11 +44,11 @@ public class InventoryProvider extends ContentProvider {
 
         int match = uriMatcher.match(uri);
         switch(match){
+            case PRODUCT_ID:
+                selection = ProductEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
             case PRODUCTS:
                 cursor = database.query(ProductEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-                break;
-            case PRODUCT_ID:
-
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unkown URI " + uri);
@@ -74,6 +76,50 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final int match = uriMatcher.match(uri);
+        switch (match) {
+            case PRODUCT_ID:
+                selection = ProductEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+            case PRODUCTS:
+                return updatePet(uri, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        updateSanityCheck(values);
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        int rowsUpdated = database.update(ProductEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        if(rowsUpdated != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
+    }
+
+    private void updateSanityCheck(ContentValues values) {
+        if (values.containsKey(ProductEntry.COLUMN_PRODUCT_NAME)) {
+            if(TextUtils.isEmpty(values.get(ProductEntry.COLUMN_PRODUCT_NAME).toString())){
+                throw new IllegalArgumentException("Product requires name");
+            }
+        }
+        if (values.containsKey(ProductEntry.COLUMN_PRODUCT_PRICE)) {
+            if(Integer.parseInt(values.get(ProductEntry.COLUMN_PRODUCT_PRICE).toString()) < 0) {
+                throw new IllegalArgumentException("Product requires not negative price");
+            }
+        }
+        if (values.containsKey(ProductEntry.COLUMN_PRODUCT_QUANTITY)){
+            if(Integer.parseInt(values.get(ProductEntry.COLUMN_PRODUCT_PRICE).toString()) < 0) {
+                throw new IllegalArgumentException("Product requires not negative quantity");
+            }
+        }
     }
 }
