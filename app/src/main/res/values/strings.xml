@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">InventoryApp</string>
+    <string name="empty_view_title_text">There are no item is the shop yet.</string>
+    <string name="empty_view_subtitle_text">Add them by clicking button below.</string>
+    <string name="button_add_item_label">Add item</string>
+    <string name="button_sale_label">Sale 1 item</string>
 </resources>
