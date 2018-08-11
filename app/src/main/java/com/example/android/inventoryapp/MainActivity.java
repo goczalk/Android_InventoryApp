@@ -1,7 +1,12 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentUris;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,22 +22,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new InventoryDbHelper(this);
+        ListView inventoryListView = (ListView) findViewById(R.id.list);
+        View emptyView = findViewById(R.id.empty_view);
+        inventoryListView.setEmptyView(emptyView);
 
-        long newRowId = InventoryDbUtils.insertDummyDataToDb(dbHelper);
-        if(newRowId == -1){
-            Toast.makeText(this, "Error writing data to databe", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this, "Data added", Toast.LENGTH_SHORT).show();
-        }
+        InventoryCursorAdapter inventoryCursorAdapter = new InventoryCursorAdapter(this, null);
+        inventoryListView.setAdapter(inventoryCursorAdapter);
 
-        //TODO
-        //better to be OnStart()
-        //https://udacity-reviews-uploads.s3.us-west-2.amazonaws.com/_attachments/90400/1529577710/Screenshot_7.png
-        String dbResult = InventoryDbUtils.readFromDb(dbHelper);
-        TextView textView = findViewById(R.id.text_view);
-        textView.setText(dbResult);
+//        getLoaderManager().initLoader(PET_LOADER, null, this);
+
     }
 
 }
