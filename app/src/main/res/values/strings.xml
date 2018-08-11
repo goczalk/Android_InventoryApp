@@ -4,4 +4,11 @@
     <string name="empty_view_subtitle_text">Add them in menu above.</string>
     <string name="button_add_item_label">Add item</string>
     <string name="button_sale_label">Sale 1 item</string>
+    <string name="text_view_name_label">Product Name</string>
+    <string name="text_view_price_label">Price</string>
+    <string name="text_view_quantity_label">Quantity</string>
+    <string name="plus">+</string>
+    <string name="minus">-</string>
+    <string name="text_view_supplier_name_label">Supplier name</string>
+    <string name="text_view_supplier_phone_label">Supplier phone</string>
 </resources>

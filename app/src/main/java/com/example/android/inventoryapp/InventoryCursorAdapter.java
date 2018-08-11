@@ -3,6 +3,7 @@ package com.example.android.inventoryapp;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
+
+import java.text.NumberFormat;
 
 /**
  * Created by klaudia on 11/08/18.
@@ -42,6 +45,15 @@ class InventoryCursorAdapter extends CursorAdapter {
         int price = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_PRICE));
         final Integer quantity = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_QUANTITY));
 
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EditorActivity.class);
+                intent.setData(ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id));
+                context.startActivity(intent);
+            }
+        });
+
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +71,7 @@ class InventoryCursorAdapter extends CursorAdapter {
         int newQuantity = cursor.getInt(cursor.getColumnIndexOrThrow(ProductEntry.COLUMN_PRODUCT_QUANTITY));
 
         nameTextView.setText(name);
-        priceTextView.setText(String.valueOf(price));
+        priceTextView.setText(NumberFormat.getCurrencyInstance().format((price)));
         quantityTextView.setText(String.valueOf(newQuantity));
     }
 }

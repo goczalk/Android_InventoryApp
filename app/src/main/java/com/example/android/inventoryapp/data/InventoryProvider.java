@@ -82,13 +82,13 @@ public class InventoryProvider extends ContentProvider {
                 selection = ProductEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
             case PRODUCTS:
-                return updatePet(uri, values, selection, selectionArgs);
+                return updateProduct(uri, values, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
 
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (values.size() == 0) {
             return 0;
         }
@@ -117,7 +117,7 @@ public class InventoryProvider extends ContentProvider {
             }
         }
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_QUANTITY)){
-            if(Integer.parseInt(values.get(ProductEntry.COLUMN_PRODUCT_PRICE).toString()) < 0) {
+            if(Integer.parseInt(values.get(ProductEntry.COLUMN_PRODUCT_QUANTITY).toString()) < 0) {
                 throw new IllegalArgumentException("Product requires not negative quantity");
             }
         }
