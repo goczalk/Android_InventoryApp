@@ -70,10 +70,10 @@
             android:text="@string/text_view_quantity_label"/>
 
         <Button
-            android:id="@+id/button_increase_quantity"
+            android:id="@+id/button_decrease_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/plus"/>
+            android:text="@string/minus"/>
 
         <EditText
             android:id="@+id/edit_product_quantity"
@@ -86,10 +86,10 @@
             tools:text="54"/>
 
         <Button
-            android:id="@+id/button_decrease_quantity"
+            android:id="@+id/button_increase_quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/minus"/>
+            android:text="@string/plus"/>
 
     </LinearLayout>
 

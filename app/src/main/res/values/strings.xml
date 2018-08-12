@@ -11,4 +11,6 @@
     <string name="minus">-</string>
     <string name="text_view_supplier_name_label">Supplier name</string>
     <string name="text_view_supplier_phone_label">Supplier phone</string>
+    <string name="add_product_title">Add product</string>
+    <string name="edit_product_title">Edit product</string>
 </resources>
