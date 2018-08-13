@@ -71,21 +71,41 @@ public class InventoryProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
-    }
-
-    @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int match = uriMatcher.match(uri);
+        int rowsDeleted = 0;
+
         switch (match) {
             case PRODUCT_ID:
                 selection = ProductEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
             case PRODUCTS:
-                return updateProduct(uri, values, selection, selectionArgs);
+                SQLiteDatabase database = dbHelper.getWritableDatabase();
+                rowsDeleted = database.delete(ProductEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Delete is not supported for " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsDeleted;
+    }
+
+    @Override
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        final int match = uriMatcher.match(uri);
+        int rowsUpdated = 0;
+
+        switch (match) {
+            case PRODUCT_ID:
+                selection = ProductEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+            case PRODUCTS:
+                rowsUpdated = updateProduct(uri, values, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsUpdated;
     }
 
     private int updateProduct(Uri uri, ContentValues values, String selection, String[] selectionArgs) {

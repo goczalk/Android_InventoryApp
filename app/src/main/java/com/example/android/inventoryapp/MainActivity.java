@@ -1,13 +1,18 @@
 package com.example.android.inventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
@@ -23,10 +28,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
-//        InventoryDbHelper dbHelper = new InventoryDbHelper(this);
-//        insertDummyDataToDb(dbHelper);
-//        insertDummyDataToDb(dbHelper);
+
+        InventoryDbHelper dbHelper = new InventoryDbHelper(this);
+        insertDummyDataToDb(dbHelper);
+        insertDummyDataToDb(dbHelper);
 
 
         ListView listView = (ListView) findViewById(R.id.list);
@@ -35,18 +40,36 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         inventoryCursorAdapter = new InventoryCursorAdapter(this, null);
         listView.setAdapter(inventoryCursorAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Log.e("xxx", "klik");
-//                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-//                intent.setData(ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id));
-//                startActivity(intent);
-//            }
-//        });
-
         getLoaderManager().initLoader(INVENTORY_LOADER, null, this);
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add_product:
+                Intent intent = new Intent(this, EditorActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_delete_all_entries:
+                Log.e("x", "HERE I AM");
+                deleteAllPets();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAllPets() {
+        int rowsDeleted =  getContentResolver().delete(ProductEntry.CONTENT_URI, null, null);
+        Log.v(getLocalClassName(), "Deleted " + rowsDeleted + " rows.");
+    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
