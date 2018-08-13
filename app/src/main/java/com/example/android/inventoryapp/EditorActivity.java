@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +42,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Button plusButton;
     private Button minusButton;
     private TextView currencyTextView;
+    private Button callSupplierButton;
 
     int quantity;
 
@@ -55,7 +57,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         findViewsById();
         currencyTextView.setText(Currency.getInstance(Locale.getDefault()).getSymbol());
         plusAndMinusButttonsSetOnClickListeners();
-
+        callSellerSetOnClickListener();
         setAccordingTitle();
 
         if(isInEditorState()){
@@ -64,6 +66,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         else{
             quantityEditText.setText(String.valueOf(0));
         }
+    }
+
+    private void findViewsById() {
+        nameEditText = findViewById(R.id.edit_product_name);
+        priceEditText = findViewById(R.id.edit_product_price);
+        quantityEditText = findViewById(R.id.edit_product_quantity);
+        supplierNameEditText = findViewById(R.id.edit_supplier_name);
+        supplierPhoneEditText = findViewById(R.id.edit_supplier_phone);
+
+        plusButton = findViewById(R.id.button_increase_quantity);
+        minusButton = findViewById(R.id.button_decrease_quantity);
+
+        currencyTextView = findViewById(R.id.text_view_currency);
+
+        callSupplierButton = findViewById(R.id.button_call_supplier);
     }
 
     private void plusAndMinusButttonsSetOnClickListeners() {
@@ -86,19 +103,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         });
     }
 
-    private void findViewsById() {
-        nameEditText = findViewById(R.id.edit_product_name);
-        priceEditText = findViewById(R.id.edit_product_price);
-        quantityEditText = findViewById(R.id.edit_product_quantity);
-        supplierNameEditText = findViewById(R.id.edit_supplier_name);
-        supplierPhoneEditText = findViewById(R.id.edit_supplier_phone);
-
-        plusButton = findViewById(R.id.button_increase_quantity);
-        minusButton = findViewById(R.id.button_decrease_quantity);
-
-        currencyTextView = findViewById(R.id.text_view_currency);
-    }
-
     private void setAccordingTitle() {
         if(isInEditorState()){
             setTitle(R.string.edit_product_title);
@@ -106,6 +110,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         else{
             setTitle(R.string.add_product_title);
         }
+    }
+
+    private void callSellerSetOnClickListener() {
+        callSupplierButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phoneNum = supplierPhoneEditText.getText().toString();
+                if(!TextUtils.isEmpty(phoneNum)) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + phoneNum));
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private boolean isInEditorState(){

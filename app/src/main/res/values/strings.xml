@@ -25,4 +25,5 @@
     <string name="toast_msg_update_success">Product updated successfully.</string>
     <string name="toast_msg_insert_failed">Failed to add product.</string>
     <string name="toast_msg_insert_success">Product added successfully.</string>
+    <string name="call_supplier">Call supplier</string>
 </resources>
