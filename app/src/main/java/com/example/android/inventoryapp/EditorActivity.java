@@ -1,8 +1,10 @@
 package com.example.android.inventoryapp;
 
+import android.app.AlertDialog;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -150,8 +152,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 }
                 return true;
             case R.id.action_delete_product:
-                deleteProduct();
-                finish();
+                showDeleteConfirmationDialog();
+//                deleteProduct();
+//                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -181,7 +184,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             quantityEditText.setError(getString(R.string.field_required));
             anyRequired = true;
         }
-        if(anyRequired) return false;
+        if(anyRequired){
+            Toast.makeText(this, R.string.toast_msg_cannot_save, Toast.LENGTH_LONG).show();
+            return false;
+        }
 
         int price = Integer.parseInt(priceString);
         int quantity = Integer.parseInt(quantityString);
@@ -258,5 +264,26 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         quantityEditText.setText(null);
         supplierNameEditText.setText(null);
         supplierPhoneEditText.setText(null);
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteProduct();
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }

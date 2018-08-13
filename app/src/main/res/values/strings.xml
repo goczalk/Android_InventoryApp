@@ -27,4 +27,7 @@
     <string name="toast_msg_insert_success">Product added successfully.</string>
     <string name="call_supplier">Call supplier</string>
     <string name="field_required">Field is required</string>
+    <string name="delete_dialog_msg">Delete this product?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>
