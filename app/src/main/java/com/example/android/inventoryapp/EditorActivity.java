@@ -16,7 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 import static com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
 
@@ -35,6 +40,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText supplierPhoneEditText;
     private Button plusButton;
     private Button minusButton;
+    private TextView currencyTextView;
 
     int quantity;
 
@@ -47,6 +53,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         currentProductUri = intent.getData();
 
         findViewsById();
+        currencyTextView.setText(Currency.getInstance(Locale.getDefault()).getSymbol());
         plusAndMinusButttonsSetOnClickListeners();
 
         setAccordingTitle();
@@ -88,6 +95,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         plusButton = findViewById(R.id.button_increase_quantity);
         minusButton = findViewById(R.id.button_decrease_quantity);
+
+        currencyTextView = findViewById(R.id.text_view_currency);
     }
 
     private void setAccordingTitle() {
