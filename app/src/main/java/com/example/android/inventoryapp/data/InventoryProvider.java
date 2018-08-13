@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
 
@@ -19,6 +20,7 @@ import com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
 
 public class InventoryProvider extends ContentProvider {
 
+    private static final String LOG_TAG = "InventoryProvider";
     private InventoryDbHelper dbHelper;
 
     private static final int PRODUCTS = 100;
@@ -60,13 +62,42 @@ public class InventoryProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        return null;
+        final int match = uriMatcher.match(uri);
+        switch (match) {
+            case PRODUCTS:
+                return ProductEntry.CONTENT_LIST_TYPE;
+            case PRODUCT_ID:
+                return ProductEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        return null;
+        final int match = uriMatcher.match(uri);
+        switch (match) {
+            case PRODUCTS:
+                return insertProduct(uri, values);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    private Uri insertProduct(Uri uri, ContentValues values) {
+        valuesSanityCheck(values);
+
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        long id = database.insert(ProductEntry.TABLE_NAME, null, values);
+
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
@@ -113,7 +144,7 @@ public class InventoryProvider extends ContentProvider {
             return 0;
         }
 
-        updateSanityCheck(values);
+        valuesSanityCheck(values);
 
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         int rowsUpdated = database.update(ProductEntry.TABLE_NAME, values, selection, selectionArgs);
@@ -125,7 +156,7 @@ public class InventoryProvider extends ContentProvider {
         return rowsUpdated;
     }
 
-    private void updateSanityCheck(ContentValues values) {
+    private void valuesSanityCheck(ContentValues values) {
         if (values.containsKey(ProductEntry.COLUMN_PRODUCT_NAME)) {
             if(TextUtils.isEmpty(values.get(ProductEntry.COLUMN_PRODUCT_NAME).toString())){
                 throw new IllegalArgumentException("Product requires name");
