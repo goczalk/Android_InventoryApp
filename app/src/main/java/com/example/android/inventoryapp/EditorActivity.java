@@ -20,7 +20,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
@@ -30,6 +29,9 @@ import static com.example.android.inventoryapp.data.InventoryContract.ProductEnt
  * Created by klaudia on 11/08/18.
  */
 
+
+//TODO
+//Note: Including the Product Image is an optional feature. The functionality to pick a picture from the gallery is beyond the scope of this program, but students who are interested in learning this functionality may implement it.
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int LOADER_EDIT_PRODUCT_ID = 2;
     private Uri currentProductUri;
@@ -143,8 +145,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save_product:
-                saveProduct();
-                finish();
+                if(saveProduct()) {
+                    finish();
+                }
                 return true;
             case R.id.action_delete_product:
                 deleteProduct();
@@ -154,7 +157,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveProduct() {
+    private boolean saveProduct() {
         String name = null, priceString = null, quantityString = null;
 
         name = nameEditText.getText().toString().trim();
@@ -165,10 +168,20 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         String supplierName = supplierNameEditText.getText().toString().trim();
         String supplierPhone = supplierPhoneEditText.getText().toString().trim();
 
-        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(priceString) || TextUtils.isEmpty(quantityString)){
-            Toast.makeText(this, R.string.toast_msg_cannot_save, Toast.LENGTH_LONG).show();
-            return;
+        boolean anyRequired = false;
+        if(TextUtils.isEmpty(name)) {
+            nameEditText.setError(getString(R.string.field_required));
+            anyRequired = true;
         }
+        if(TextUtils.isEmpty(priceString)){
+            priceEditText.setError(getString(R.string.field_required));
+            anyRequired = true;
+        }
+        if(TextUtils.isEmpty(quantityString)){
+            quantityEditText.setError(getString(R.string.field_required));
+            anyRequired = true;
+        }
+        if(anyRequired) return false;
 
         int price = Integer.parseInt(priceString);
         int quantity = Integer.parseInt(quantityString);
@@ -198,6 +211,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Toast.makeText(this, R.string.toast_msg_insert_success, Toast.LENGTH_SHORT).show();
             }
         }
+        return true;
     }
 
     private void deleteProduct() {

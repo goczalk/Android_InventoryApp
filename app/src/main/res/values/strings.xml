@@ -26,4 +26,5 @@
     <string name="toast_msg_insert_failed">Failed to add product.</string>
     <string name="toast_msg_insert_success">Product added successfully.</string>
     <string name="call_supplier">Call supplier</string>
+    <string name="field_required">Field is required</string>
 </resources>
