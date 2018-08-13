@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -9,13 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.android.inventoryapp.data.InventoryContract;
-
-import static com.example.android.inventoryapp.data.InventoryContract.*;
+import static com.example.android.inventoryapp.data.InventoryContract.ProductEntry;
 
 /**
  * Created by klaudia on 11/08/18.
@@ -50,6 +53,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         if(isInEditorState()){
             getLoaderManager().initLoader(LOADER_EDIT_PRODUCT_ID, null, this);
+        }
+        else{
+            quantityEditText.setText(String.valueOf(0));
         }
     }
 
@@ -100,6 +106,82 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return false;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_editor_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_save_product:
+                saveProduct();
+                finish();
+                return true;
+            case R.id.action_delete_product:
+                deleteProduct();
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void saveProduct() {
+        String name = null, priceString = null, quantityString = null;
+
+        name = nameEditText.getText().toString().trim();
+
+        priceString = priceEditText.getText().toString().trim();
+        quantityString = quantityEditText.getText().toString().trim();
+
+        String supplierName = supplierNameEditText.getText().toString().trim();
+        String supplierPhone = supplierPhoneEditText.getText().toString().trim();
+
+        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(priceString) || TextUtils.isEmpty(quantityString)){
+            Toast.makeText(this, R.string.toast_msg_cannot_save, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        int price = Integer.parseInt(priceString);
+        int quantity = Integer.parseInt(quantityString);
+
+        ContentValues values = new ContentValues();
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, name);
+        values.put(ProductEntry.COLUMN_PRODUCT_PRICE, price);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity);
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_NAME, supplierName);
+        values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER_PHONE, supplierPhone);
+
+        if(isInEditorState()){
+            int rowsUpdated = getContentResolver().update(currentProductUri, values,null, null);
+            if(rowsUpdated == 0){
+                Toast.makeText(this, R.string.toast_msg_update_failed, Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, R.string.toast_msg_update_success, Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+            if(newUri == null){
+                Toast.makeText(this, R.string.toast_msg_insert_failed, Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(this, R.string.toast_msg_insert_success, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void deleteProduct() {
+        int rowDeleted = getContentResolver().delete(currentProductUri, null, null);
+        if(rowDeleted == 0){
+            Toast.makeText(this, R.string.toast_msg_deletion_failed, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(this, R.string.toast_msg_deletion_success, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

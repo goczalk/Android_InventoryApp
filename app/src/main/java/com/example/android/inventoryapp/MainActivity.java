@@ -1,7 +1,6 @@
 package com.example.android.inventoryapp;
 
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -29,11 +28,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        InventoryDbHelper dbHelper = new InventoryDbHelper(this);
-        insertDummyDataToDb(dbHelper);
-        insertDummyDataToDb(dbHelper);
-
-
         ListView listView = (ListView) findViewById(R.id.list);
         View emptyView = findViewById(R.id.empty_view);
         listView.setEmptyView(emptyView);
@@ -58,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
                 return true;
             case R.id.action_delete_all_entries:
-                Log.e("x", "HERE I AM");
                 deleteAllPets();
                 return true;
         }

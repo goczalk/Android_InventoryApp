@@ -16,4 +16,13 @@
     <string name="action_delete_all_entries">Delete all products</string>
     <string name="delete_all_label">Delete all</string>
     <string name="add_label">Add</string>
+    <string name="action_delete_product">Delete product</string>
+    <string name="save_product">Save</string>
+    <string name="toast_msg_deletion_failed">Failed to delete product.</string>
+    <string name="toast_msg_deletion_success">Product deleted.</string>
+    <string name="toast_msg_cannot_save">Product was not saved. Valid name, price and quantity needed.</string>
+    <string name="toast_msg_update_failed">Failed to update product.</string>
+    <string name="toast_msg_update_success">Product updated successfully.</string>
+    <string name="toast_msg_insert_failed">Failed to add product.</string>
+    <string name="toast_msg_insert_success">Product added successfully.</string>
 </resources>
