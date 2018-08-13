@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list"/>
+        android:layout_height="match_parent" />
 
     <!-- Empty view for the list -->
     <RelativeLayout
@@ -24,7 +23,7 @@
             android:fontFamily="sans-serif-medium"
             android:paddingTop="16dp"
             android:text="@string/empty_view_title_text"
-            android:textAppearance="?android:textAppearanceMedium"/>
+            android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
             android:id="@+id/empty_subtitle_text"
@@ -36,7 +35,7 @@
             android:paddingTop="8dp"
             android:text="@string/empty_view_subtitle_text"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#A2AAB0"/>
+            android:textColor="#A2AAB0" />
     </RelativeLayout>
 
 </RelativeLayout>

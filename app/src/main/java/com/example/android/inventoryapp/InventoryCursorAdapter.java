@@ -22,8 +22,6 @@ import java.text.NumberFormat;
 
 class InventoryCursorAdapter extends CursorAdapter {
 
-    private static final int INVENTORY_ADAPTER_LOADER = 1;
-
     public InventoryCursorAdapter(Context context, Cursor c) {
         super(context, c);
     }
@@ -57,7 +55,7 @@ class InventoryCursorAdapter extends CursorAdapter {
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(quantity > 0) {
+                if (quantity > 0) {
                     ContentValues values = new ContentValues();
                     values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantity - 1);
 

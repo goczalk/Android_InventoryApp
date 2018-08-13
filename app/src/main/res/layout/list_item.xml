@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Layout for a single list item in the list of pets -->
+<?xml version="1.0" encoding="utf-8"?><!-- Layout for a single list item in the list of pets -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_weight="4"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_weight="4"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/text_view_name"
@@ -20,7 +19,7 @@
             android:fontFamily="sans-serif-medium"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="#2B3D4D"
-            tools:text="Headphones"/>
+            tools:text="Headphones" />
 
         <TextView
             android:id="@+id/text_view_price"
@@ -29,27 +28,27 @@
             android:fontFamily="sans-serif"
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#AEB6BD"
-            tools:text="20$"/>
+            tools:text="20$" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/text_view_quantity"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:fontFamily="sans-serif-medium"
+        android:gravity="center"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="#2B3D4D"
-        tools:text="10"
-        android:gravity="center"/>
+        tools:text="10" />
 
     <Button
         android:id="@+id/button_sale"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:fontFamily="sans-serif"
-        android:textAppearance="?android:textAppearanceSmall"
-        android:text="@string/button_sale_label"/>
+        android:text="@string/button_sale_label"
+        android:textAppearance="?android:textAppearanceSmall" />
 
 </LinearLayout>
