@@ -138,6 +138,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (!isInEditorState()) {
+            MenuItem menuItem = menu.findItem(R.id.action_delete_product);
+            menuItem.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save_product:
@@ -153,15 +163,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private boolean saveProduct() {
-        String name = null, priceString = null, quantityString = null;
+        String name = null, priceString = null, quantityString = null, supplierName = null,
+                supplierPhone = null;
 
         name = nameEditText.getText().toString().trim();
-
         priceString = priceEditText.getText().toString().trim();
         quantityString = quantityEditText.getText().toString().trim();
-
-        String supplierName = supplierNameEditText.getText().toString().trim();
-        String supplierPhone = supplierPhoneEditText.getText().toString().trim();
+        supplierName = supplierNameEditText.getText().toString().trim();
+        supplierPhone = supplierPhoneEditText.getText().toString().trim();
 
         boolean anyRequired = false;
         if (TextUtils.isEmpty(name)) {
@@ -174,6 +183,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         }
         if (TextUtils.isEmpty(quantityString)) {
             quantityEditText.setError(getString(R.string.field_required));
+            anyRequired = true;
+        }
+        if (TextUtils.isEmpty(supplierName)) {
+            supplierNameEditText.setError(getString(R.string.field_required));
+            anyRequired = true;
+        }
+        if (TextUtils.isEmpty(supplierPhone)) {
+            supplierPhoneEditText.setError(getString(R.string.field_required));
             anyRequired = true;
         }
         if (anyRequired) {

@@ -20,7 +20,7 @@
     <string name="save_product">Save</string>
     <string name="toast_msg_deletion_failed">Failed to delete product.</string>
     <string name="toast_msg_deletion_success">Product deleted.</string>
-    <string name="toast_msg_cannot_save">Product was not saved. Valid name, price and quantity needed.</string>
+    <string name="toast_msg_cannot_save">Product was not saved. All fields need to be valid.</string>
     <string name="toast_msg_update_failed">Failed to update product.</string>
     <string name="toast_msg_update_success">Product updated successfully.</string>
     <string name="toast_msg_insert_failed">Failed to add product.</string>
